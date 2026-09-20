@@ -1,3 +1,4 @@
+#All codes are AI generated
 # Library Management System
 
 A full-stack Library Management System designed to handle book cataloging, member registration, and circulation tracking. 
