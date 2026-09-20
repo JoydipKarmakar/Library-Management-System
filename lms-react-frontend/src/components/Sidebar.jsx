@@ -11,6 +11,8 @@ export default function Sidebar() {
         <ul>
           <li><NavLink to="/"><i className="fa-solid fa-house"></i> Dashboard</NavLink></li>
           <li><NavLink to="/catalog"><i className="fa-solid fa-book-open"></i> Catalog</NavLink></li>
+          <li><NavLink to="/members"><i className="fa-solid fa-users"></i> Members</NavLink></li>
+          <li><NavLink to="/circulation"><i className="fa-solid fa-rotate"></i> Circulation</NavLink></li>
         </ul>
       </nav>
     </aside>

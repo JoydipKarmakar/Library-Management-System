@@ -6,7 +6,7 @@ import Catalog from './pages/Catalog';
 import Members from './pages/Members';
 import Circulation from './pages/Circulation';
 
-function App() {
+export default function App() {
   return (
     <Router>
       <div className="dashboard-container">
@@ -26,4 +26,3 @@ function App() {
     </Router>
   );
 }
-export default App;
