@@ -5,3 +5,4 @@ library.db
 .venv/
 __pycache__/
 library.db
+serviceAccountKey.json

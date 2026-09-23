@@ -77,6 +77,20 @@ def checkout():
     conn.close()
     return jsonify({"message": msg}), status
 
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    
+    # This print statement will show you exactly what React sent in your Python terminal
+    print("RECEIVED FROM REACT:", data)
+    
+    # Using a hardcoded admin for simplicity without altering your existing DB tables
+    if data and data.get('username') == 'admin' and data.get('password') == 'library2026':
+        return jsonify({"message": "Login successful", "token": "mock-jwt-token-123"}), 200
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
+
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5000)
+    # host='0.0.0.0' allows external connections inside Codespaces
+    app.run(host='0.0.0.0', debug=True, port=5000)
