@@ -1,0 +1,22 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.105:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 106-569-782
+127.0.0.1 - - [24/Sep/2026 18:45:38] "POST /api/login HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:54:16] "POST /api/login HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:56:12] "POST /api/login HTTP/1.1" 200 -
+127.0.0.1 - - [24/Sep/2026 18:56:25] "POST /api/login HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:56:35] "GET /api/books HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:56:45] "[35m[1mPOST /api/books HTTP/1.0[0m" 201 -
+127.0.0.1 - - [24/Sep/2026 18:56:45] "GET /api/books HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:56:56] "[35m[1mPOST /api/books HTTP/1.0[0m" 201 -
+127.0.0.1 - - [24/Sep/2026 18:56:56] "GET /api/books HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:57:02] "GET /api/members HTTP/1.0" 200 -
+127.0.0.1 - - [24/Sep/2026 18:57:24] "[35m[1mPOST /api/members HTTP/1.0[0m" 201 -
+127.0.0.1 - - [24/Sep/2026 18:57:24] "GET /api/members HTTP/1.0" 200 -

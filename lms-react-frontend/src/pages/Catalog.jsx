@@ -7,7 +7,7 @@ export default function Catalog() {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/books');
+      const response = await fetch('/api/books');
       setBooks(await response.json());
     } catch (error) { console.error("Database connection failed", error); }
   };
@@ -17,7 +17,7 @@ export default function Catalog() {
   const handleAddBook = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/books', {
+      const response = await fetch('/api/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newBook)

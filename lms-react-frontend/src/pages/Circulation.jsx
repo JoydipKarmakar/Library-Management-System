@@ -11,7 +11,7 @@ export default function Circulation() {
     if (memberQuery.length < 1) { setMemberSuggestions([]); return; }
     const fetchMembers = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/members');
+        const response = await fetch('/api/members');
         const data = await response.json();
         setMemberSuggestions(data.filter(m => m.id.toLowerCase().includes(memberQuery.toLowerCase()) || m.name.toLowerCase().includes(memberQuery.toLowerCase())));
       } catch (err) {}
@@ -24,7 +24,7 @@ export default function Circulation() {
     if (bookQuery.length < 1) { setBookSuggestions([]); return; }
     const fetchBooks = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/books');
+        const response = await fetch('/api/books');
         const data = await response.json();
         setBookSuggestions(data.filter(b => b.isbn.toLowerCase().includes(bookQuery.toLowerCase()) || b.title.toLowerCase().includes(bookQuery.toLowerCase())));
       } catch (err) {}
@@ -34,7 +34,7 @@ export default function Circulation() {
 
   const handleCheckout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/checkout', {
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ member_id: memberQuery, isbn: bookQuery })

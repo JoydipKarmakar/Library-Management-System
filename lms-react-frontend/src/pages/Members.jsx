@@ -7,7 +7,7 @@ export default function Members() {
 
   const fetchMembers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/members');
+      const response = await fetch('/api/members');
       setMembers(await response.json());
     } catch (error) { console.error("Database connection failed", error); }
   };
@@ -17,7 +17,7 @@ export default function Members() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/members', {
+      const response = await fetch('/api/members', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMember)
