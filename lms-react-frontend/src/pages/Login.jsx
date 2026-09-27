@@ -6,7 +6,6 @@ import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail 
 } from 'firebase/auth';
 
-// Your active Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBFd-gY04hLGtbrgZ-uhF8i_HztSxrEwd8",
   authDomain: "lms-auth-6ae40.firebaseapp.com",
@@ -22,6 +21,7 @@ const auth = getAuth(app);
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [role, setRole] = useState('student');
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -32,8 +32,8 @@ export default function Login() {
     setError('');
     setMessage('');
 
-    // Admin fallback
-    if (credentials.username === 'admin' && credentials.password === 'library2026') {
+    // Hardcoded Admin Fallback
+    if (role === 'admin' && credentials.username === 'admin' && credentials.password === 'library2026') {
       try {
         const response = await fetch('/api/login', {
           method: 'POST',
@@ -41,8 +41,10 @@ export default function Login() {
           body: JSON.stringify(credentials)
         });
         if (response.ok) {
+          const data = await response.json();
           localStorage.setItem('isAuthenticated', 'true');
-          navigate('/');
+          localStorage.setItem('userRole', data.role);
+          navigate('/'); 
         } else {
           setError('Invalid admin credentials');
         }
@@ -52,7 +54,7 @@ export default function Login() {
       return;
     }
 
-    // Firebase Email/Password Auth for standard users
+    // Firebase Email/Password Auth
     try {
       let result;
       if (isRegistering) {
@@ -68,12 +70,18 @@ export default function Login() {
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
-        }
+        },
+        body: JSON.stringify({ role: role }) 
       });
 
       if (response.ok) {
+        const data = await response.json();
         localStorage.setItem('isAuthenticated', 'true');
-        navigate('/');
+        localStorage.setItem('userRole', data.role);
+        
+        if (data.role === 'admin') navigate('/');
+        else if (data.role === 'faculty') navigate('/faculty-dashboard');
+        else navigate('/student-dashboard');
       } else {
         setError('Backend verification failed');
       }
@@ -106,12 +114,18 @@ export default function Login() {
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
-        }
+        },
+        body: JSON.stringify({ role: role }) 
       });
 
       if (response.ok) {
+        const data = await response.json();
         localStorage.setItem('isAuthenticated', 'true');
-        navigate('/');
+        localStorage.setItem('userRole', data.role);
+        
+        if (data.role === 'admin') navigate('/');
+        else if (data.role === 'faculty') navigate('/faculty-dashboard');
+        else navigate('/student-dashboard');
       } else {
         setError('Social login verification failed on backend');
       }
@@ -129,6 +143,23 @@ export default function Login() {
         {message && <p style={{ color: 'green', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>{message}</p>}
         
         <form onSubmit={handleStandardAuth} style={{ marginBottom: '20px' }}>
+          
+          {/* Role Selection Block */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '20px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', fontSize: '14px' }}>
+              <input type="radio" value="student" checked={role === 'student'} onChange={(e) => setRole(e.target.value)} />
+              Student
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', fontSize: '14px' }}>
+              <input type="radio" value="faculty" checked={role === 'faculty'} onChange={(e) => setRole(e.target.value)} />
+              Faculty
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', fontSize: '14px' }}>
+              <input type="radio" value="admin" checked={role === 'admin'} onChange={(e) => setRole(e.target.value)} />
+              Admin
+            </label>
+          </div>
+
           <div style={{ marginBottom: '15px' }}>
             <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Email / Username</label>
             <input 
@@ -154,11 +185,11 @@ export default function Login() {
         </form>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '20px' }}>
-          <button onClick={() => setIsRegistering(!isRegistering)} style={{ background: 'none', border: 'none', color: '#3B82F6', cursor: 'pointer', padding: 0 }}>
+          <button type="button" onClick={() => setIsRegistering(!isRegistering)} style={{ background: 'none', border: 'none', color: '#3B82F6', cursor: 'pointer', padding: 0 }}>
             {isRegistering ? 'Already have an account? Login' : 'Need an account? Register'}
           </button>
           {!isRegistering && (
-            <button onClick={handleForgotPassword} style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer', padding: 0 }}>
+            <button type="button" onClick={handleForgotPassword} style={{ background: 'none', border: 'none', color: '#6B7280', cursor: 'pointer', padding: 0 }}>
               Forgot Password?
             </button>
           )}
@@ -171,15 +202,15 @@ export default function Login() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <button onClick={() => handleSocialLogin(new GoogleAuthProvider())} style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#ffffff', border: '1px solid #D1D5DB', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
+          <button type="button" onClick={() => handleSocialLogin(new GoogleAuthProvider())} style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#ffffff', border: '1px solid #D1D5DB', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: '20px' }} />
             Continue with Google
           </button>
-          <button onClick={() => handleSocialLogin(new GithubAuthProvider())} style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#24292F', color: 'white', border: 'none', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
+          <button type="button" onClick={() => handleSocialLogin(new GithubAuthProvider())} style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#24292F', color: 'white', border: 'none', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
             <img src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub" style={{ width: '20px', filter: 'invert(1)' }} />
             Continue with GitHub
           </button>
-          <button onClick={() => handleSocialLogin(new FacebookAuthProvider())} style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#1877F2', color: 'white', border: 'none', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
+          <button type="button" onClick={() => handleSocialLogin(new FacebookAuthProvider())} style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#1877F2', color: 'white', border: 'none', borderRadius: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
             <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" style={{ width: '20px' }} />
             Continue with Facebook
           </button>
