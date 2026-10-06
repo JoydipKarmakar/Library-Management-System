@@ -42,3 +42,7 @@ This project requires two concurrent terminal windows to run the Flask backend a
 ### 1. Clone & Navigate to Project
 ```bash
 git
+
+
+<!-- LAST_UPDATED --> *Last automated update: initial setup*
+
